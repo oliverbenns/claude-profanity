@@ -18,4 +18,4 @@ Ask Claude Code to check your conversation history for profanity. The skill will
 
 ## Publishing
 
-A GitHub Release is automatically created on every push to `main`.
+Publishing is handled manually via `gh skill publish`.
