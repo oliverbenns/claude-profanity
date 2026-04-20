@@ -9,62 +9,12 @@ permissions:
   contents: write
 
 jobs:
-  validate-and-publish:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate SKILL.md exists
-        run: |
-          if [ ! -f SKILL.md ]; then
-            echo "::error::SKILL.md not found"
-            exit 1
-          fi
-
-      - name: Validate SKILL.md frontmatter
-        run: |
-          # Extract and validate required frontmatter fields
-          if ! head -1 SKILL.md | grep -q '^---$'; then
-            echo "::error::SKILL.md must start with YAML frontmatter (---)"
-            exit 1
-          fi
-
-          # Extract frontmatter
-          FRONTMATTER=$(sed -n '/^---$/,/^---$/p' SKILL.md)
-
-          # Check required 'name' field
-          NAME=$(echo "$FRONTMATTER" | grep '^name:' | sed 's/name: *//')
-          if [ -z "$NAME" ]; then
-            echo "::error::Missing required 'name' field in frontmatter"
-            exit 1
-          fi
-
-          # Validate name format (lowercase, hyphens, no leading/trailing/consecutive hyphens)
-          if ! echo "$NAME" | grep -qE '^[a-z][a-z0-9]*(-[a-z0-9]+)*$'; then
-            echo "::error::Invalid name format. Must be lowercase alphanumeric with single hyphens, not starting/ending with hyphen."
-            exit 1
-          fi
-
-          # Check name matches directory
-          DIRNAME=$(basename "$PWD")
-          if [ "$NAME" != "$DIRNAME" ]; then
-            echo "::error::Skill name '$NAME' must match directory name '$DIRNAME'"
-            exit 1
-          fi
-
-          # Check required 'description' field
-          DESCRIPTION=$(echo "$FRONTMATTER" | grep '^description:' | sed 's/description: *//')
-          if [ -z "$DESCRIPTION" ]; then
-            echo "::error::Missing required 'description' field in frontmatter"
-            exit 1
-          fi
-
-          echo "Skill '$NAME' validated successfully"
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: latest
-          name: Latest
-          generate_release_notes: true
-          make_latest: true
+      - name: Publish skill
+        run: gh skill publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
