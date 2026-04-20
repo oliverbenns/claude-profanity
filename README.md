@@ -14,6 +14,8 @@ gh skill install oliverbenns/claude-profanity claude-profanity
 
 Ask Claude Code to check your conversation history for profanity. The skill will search `~/.claude/history.jsonl` and present results in a table.
 
+![Example output](image.png)
+
 ## Publishing
 
 Publishing is handled manually via `gh skill publish`.
