@@ -6,10 +6,8 @@ This skill follows the [Agent Skills specification](https://agentskills.io/speci
 
 ## Install
 
-Clone or symlink this repo into your Claude Code skills directory:
-
 ```sh
-ln -s /path/to/claude-profanity ~/.claude/skills/claude-profanity
+gh skill install oliverbenns/claude-profanity claude-profanity
 ```
 
 ## Usage
