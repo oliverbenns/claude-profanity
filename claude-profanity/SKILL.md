@@ -27,22 +27,30 @@ fuck, shit, damn, ass, bitch, crap, bastard, dick, piss, bullshit, wtf, stfu, go
 
 If the user passed additional words via `$ARGUMENTS`, add those to the search list as well.
 
+## Scope
+
+- If the user specifies a project name (e.g. "check profanity in my-app"), filter results to only entries whose `project` field contains that project name.
+- If the user says "this project" or "current project", filter results to entries whose `project` field matches the current working directory.
+- Otherwise, search across all projects (global).
+
 ## Instructions
 
 1. Use Grep to search `~/.claude/history.jsonl` for the profanity word list (case-insensitive, word-boundary matching). Each line in this file is a JSON object with a `display` field containing the user's prompt, plus `project` and `sessionId` fields.
 
-2. For each match found:
+2. If a project scope was specified, filter results to only matching entries.
+
+3. For each match found:
    - Extract the `display` field (the user's actual prompt text)
    - Extract the `project` field to identify which project it came from
    - Identify which profane word(s) were matched
 
-3. Present results in a markdown table with columns:
+4. Present results in a markdown table with columns:
    - **#** (row number)
    - **Project** (short project name extracted from the path, e.g. `bcb-apps` from `/Users/oliver/Code/bcb-apps`)
    - **Prompt** (the user's message, with the profane word(s) bolded)
    - **Word(s)** (which profane words were found)
 
-4. End with a brief summary: total count, most-used word, which project had the most matches.
+5. End with a brief summary: total count, most-used word, which project had the most matches.
 
 ## Important
 
